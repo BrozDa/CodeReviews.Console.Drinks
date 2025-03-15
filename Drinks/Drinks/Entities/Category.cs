@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Drinks
 {
+    internal class CategoryResponse
+    {
+        [JsonPropertyName("drinks")]
+        public List<Category> CategoryList { get; set; }
+    }
     internal class Category
     {
+        string StrCategory { get; set; }
     }
 }
