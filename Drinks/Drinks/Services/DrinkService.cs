@@ -28,6 +28,14 @@ namespace Drinks
             return DeserializeJSON<DrinkResponse>(response.Result.Content).DrinkList;
 
         }
+        public List<DrinkDetail> GetDrinkDetailsbyID(string drinkID)
+        {
+            var request = new RestRequest($"lookup.php?i={drinkID}");
+            var response = restClient.ExecuteAsync(request);
+
+            return DeserializeJSON<DrinkDetailResponse>(response.Result.Content).DrinkDetailList;
+        }
+
         public T DeserializeJSON<T>(string JsonData)
         {
             JsonSerializerOptions options = new JsonSerializerOptions();
