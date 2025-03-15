@@ -9,6 +9,6 @@ namespace Drinks
     }
     internal class Category
     {
-        string StrCategory { get; set; }
+        public string StrCategory { get; set; }
     }
 }
