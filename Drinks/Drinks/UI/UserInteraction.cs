@@ -15,14 +15,23 @@ namespace Drinks
 
         public void RunService()
         {
-            GetCategories();
-            Console.WriteLine(GetCategoryFromUser(Categories));
+            Categories = GetCategories();
+
+            string category = GetCategoryFromUser(Categories);
+
+            var drinksInCategory = GetDrinksInCategory(category);
+            
+            var drink = GetDrinkFromCategoryFromUser(drinksInCategory);
         }
 
-        public void GetCategories()
+        public List<Category> GetCategories()
         {
-           Categories = DrinkService.GetCategories();
+           return DrinkService.GetCategories();
 
+        }
+        public List<Drink> GetDrinksInCategory(string category)
+        {
+            return DrinkService.GetDrinksInCategory(category);
         }
         public string GetCategoryFromUser(List<Category> categories)
         {
@@ -35,6 +44,22 @@ namespace Drinks
 
             return category.Replace(' ', '_');
         }
+        public string GetDrinkFromCategoryFromUser(List<Drink> drinksInCategory)
+        {
+
+            var drinkId = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                .Title("Please select a drink from list")
+                .AddChoices(drinksInCategory.Select(x => x.StrDrink))
+                .PageSize(drinksInCategory.Count)
+                );
+
+            Console.WriteLine(drinkId);
+
+            return drinkId;
+        }
+
+        
         
     }
 }

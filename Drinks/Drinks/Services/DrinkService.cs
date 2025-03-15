@@ -20,7 +20,14 @@ namespace Drinks
 
             return DeserializeJSON<CategoryResponse>(response.Result.Content).CategoryList;
         }
+        public List<Drink> GetDrinksInCategory(string category)
+        {
+            var request = new RestRequest($"filter.php?c={category}");
+            var response = restClient.ExecuteAsync(request);
 
+            return DeserializeJSON<DrinkResponse>(response.Result.Content).DrinkList;
+
+        }
         public T DeserializeJSON<T>(string JsonData)
         {
             JsonSerializerOptions options = new JsonSerializerOptions();
