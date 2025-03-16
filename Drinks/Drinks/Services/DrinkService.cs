@@ -1,19 +1,32 @@
 ﻿using RestSharp;
 using System.Text.Json;
-using System.Web;
 
 namespace Drinks
 {
+    /// <summary>
+    /// Service for retrieving drink-related data from an external API using REST requests.
+    /// Implements <see cref="IDrinkService"/>.
+    /// </summary>
     internal class DrinkService : IDrinkService
     {
         public RestClient restClient { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DrinkService"/> class.
+        /// </summary>
+        /// <param name="restClient">The <see cref="RestClient"/> instance used for making API calls.</param>
         public DrinkService(RestClient restClient)
         {
             this.restClient = restClient;
         }
 
-
+        /// <summary>
+        /// Executes a GET request to the specified API endpoint and returns the response content.
+        /// </summary>
+        /// <param name="url">The API endpoint URL.</param>
+        /// <returns>The JSON response content as a string.</returns>
+        /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the API response is empty.</exception>
         private string ExecuteGetRequest(string url)
         {
             var request = new RestRequest(url);
@@ -32,7 +45,6 @@ namespace Drinks
                 }
 
                 return response.Result.Content!;
-
             }
             catch (HttpRequestException ex)
             {
@@ -44,10 +56,9 @@ namespace Drinks
             }
         }
 
-
+        /// <inheritdoc/>
         public IEnumerable<Category> GetCategories()
         {
-
             try
             {
                 string response = ExecuteGetRequest($"list.php?c=list");
@@ -65,6 +76,8 @@ namespace Drinks
                 throw;
             }
         }
+
+        /// <inheritdoc/>
         public IEnumerable<Drink> GetDrinksInCategory(string category)
         {
             try
@@ -75,15 +88,17 @@ namespace Drinks
 
                 return deserializedResponse.DrinkList ?? new List<Drink>();
             }
-            catch(ApplicationException)
+            catch (ApplicationException)
             {
                 throw;
             }
-            catch(JsonException)
+            catch (JsonException)
             {
                 throw;
             }
         }
+
+        /// <inheritdoc/>
         public IEnumerable<DrinkDetail> GetDrinkDetailsbyID(string drinkID)
         {
             try
@@ -104,6 +119,7 @@ namespace Drinks
             }
         }
 
+        /// <inheritdoc/>
         public T DeserializeResponse<T>(string JsonData)
         {
             try
@@ -114,11 +130,10 @@ namespace Drinks
                 var deserialized = JsonSerializer.Deserialize<T>(JsonData, options);
                 return deserialized!;
             }
-            catch(JsonException ex)
+            catch (JsonException ex)
             {
                 throw new JsonException($"JSON deserialization failed: {ex}");
             }
-            
         }
     }
 }

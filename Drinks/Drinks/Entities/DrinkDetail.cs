@@ -2,11 +2,18 @@
 
 namespace Drinks
 {
+    /// <summary>
+    /// Represents the response object containing a list of drinks with all details.
+    /// </summary>
     internal class DrinkDetailResponse
     {
         [JsonPropertyName("drinks")]
         public List<DrinkDetail> DrinkDetailList { get; set; } = new List<DrinkDetail>();
     }
+
+    /// <summary>
+    /// Represents a single drink with basic with all details.
+    /// </summary>
     internal class DrinkDetail
     {
         public required string IdDrink { get; set; }
@@ -61,5 +68,4 @@ namespace Drinks
         public string? StrCreativeCommonsConfirmed { get; set; }
         public string? DateModified { get; set; }
     }
-
 }
