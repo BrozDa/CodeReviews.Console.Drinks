@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Drinks
 {
     internal interface IDrinkService
     {
+        IEnumerable<Category> GetCategories();
+        IEnumerable<Drink> GetDrinksInCategory(string category);
+        IEnumerable<DrinkDetail> GetDrinkDetailsbyID(string drinkID);
+        T DeserializeResponse<T>(string JsonData);
     }
 }

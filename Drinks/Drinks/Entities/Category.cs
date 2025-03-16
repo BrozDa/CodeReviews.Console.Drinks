@@ -5,10 +5,10 @@ namespace Drinks
     internal class CategoryResponse
     {
         [JsonPropertyName("drinks")]
-        public List<Category> CategoryList { get; set; }
+        public List<Category> CategoryList { get; set; } = new List<Category>();
     }
     internal class Category
     {
-        public string StrCategory { get; set; }
+        public required string StrCategory { get; set; }
     }
 }

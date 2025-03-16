@@ -5,12 +5,12 @@ namespace Drinks
     internal class DrinkResponse
     {
         [JsonPropertyName("drinks")]
-        public List<Drink> DrinkList { get; set; }
+        public List<Drink> DrinkList { get; set; } = new List<Drink>();
     }
     internal class Drink
     {
-        public string StrDrink {  get; set; }
-        public string StrDrinkThumb { get; set; }
-        public string IdDrink {  get; set; }  
+        public required string StrDrink {  get; set; }
+        public string? StrDrinkThumb { get; set; }
+        public required string IdDrink {  get; set; }  
     }
 }

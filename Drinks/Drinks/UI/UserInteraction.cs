@@ -1,6 +1,4 @@
 ﻿using Spectre.Console;
-using System.Reflection;
-using System.Threading.Channels;
 
 namespace Drinks
 {
@@ -12,47 +10,60 @@ namespace Drinks
         public UserInteraction(DrinkService DrinkService)
         {
             this.DrinkService = DrinkService;
+            Categories = GetCategories();
         }
 
         public void RunService()
         {
-            Categories = GetCategories();
+            bool isAppRunning = true;
 
-            string category = GetCategoryFromUser(Categories);
+            while (isAppRunning)
+            {
+                try
+                {
+                    string category = GetCategoryFromUser(Categories);
+                    List<Drink> drinksInCategory = GetDrinksInCategory(category);
+                    string drinkID = GetDrinkIdFromCategoryFromUser(drinksInCategory);
 
-            var drinksInCategory = GetDrinksInCategory(category);
-            
-            var drinkID = GetDrinkIdFromCategoryFromUser(drinksInCategory);
+                    DrinkDetail drinkDetail = GetDrinkDetails(drinkID)[0];
 
-            var drinkDetail = GetDrinkDetails(drinkID);
+                    DrinkDetailDTO drinkDetailDTO = new DrinkDetailDTO(drinkDetail);
 
-            DrinkDetailDTO drinkDetailDTO = new DrinkDetailDTO();
-            drinkDetailDTO.MapDetailToDTO(drinkDetail[0]);
+                    PrintDrinkDetailDTO(drinkDetailDTO);
 
-            PrintDrinkDetailDTO(drinkDetailDTO);
+                    isAppRunning = ShouldContinue();
+                    Console.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Somethin went wrong");
+                    Console.WriteLine($"Details: {ex.Message}");
+                }
+
+            }
 
         }
-
         public List<Category> GetCategories()
         {
-           return DrinkService.GetCategories();
+           return DrinkService.GetCategories().ToList();
 
         }
         public List<Drink> GetDrinksInCategory(string category)
         {
-            return DrinkService.GetDrinksInCategory(category);
+            return DrinkService.GetDrinksInCategory(category).ToList();
         }
         public List<DrinkDetail> GetDrinkDetails(string drinkId)
         {
-            return DrinkService.GetDrinkDetailsbyID(drinkId);
+            return DrinkService.GetDrinkDetailsbyID(drinkId).ToList();
         }
         public string GetCategoryFromUser(List<Category> categories)
         {
             var category = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                .Title("Please select category \n")
+                .Title("Please select category")
                 .AddChoices(categories.Select(x => x.StrCategory))
                 .PageSize(categories.Count)
+                .EnableSearch()
                 );
 
             return category.Replace(' ', '_');
@@ -63,9 +74,11 @@ namespace Drinks
             var drink = AnsiConsole.Prompt(
                 new SelectionPrompt<Drink>()
                 .Title("Please select a drink from list")
-                .AddChoices<Drink>(drinksInCategory)
+                .AddChoices(drinksInCategory)
                 .UseConverter(x => x.StrDrink)
                 .PageSize(drinksInCategory.Count)
+                .EnableSearch()
+                
                 );
 
             return drink.IdDrink;
@@ -87,18 +100,25 @@ namespace Drinks
             }
 
             int index = 0;
-
+            
             for(;index < drinkDetailDTO.Measures.Count; index++)
             {
                 table.AddRow($"Ingredient {index + 1}", drinkDetailDTO.Measures[index] +" "+ drinkDetailDTO.Ingredients[index]);
             }
 
+            //printing leftover ingredients withou measure
             for (; index < drinkDetailDTO.Ingredients.Count; index++)
             {
                 table.AddRow($"Ingredient {index + 1}", drinkDetailDTO.Ingredients[index]);
             }
 
             AnsiConsole.Write(table);
+        }
+        public bool ShouldContinue()
+        {
+            Console.WriteLine("Press 'ENTER' to continue or any other key to exit the app.");
+
+            return Console.ReadKey(true).Key == ConsoleKey.Enter;
         }
        
         

@@ -4,7 +4,7 @@ using System.Web;
 
 namespace Drinks
 {
-    internal class DrinkService
+    internal class DrinkService : IDrinkService
     {
         public RestClient restClient { get; }
 
@@ -13,36 +13,112 @@ namespace Drinks
             this.restClient = restClient;
         }
 
-        public List<Category> GetCategories()
+
+        private string ExecuteGetRequest(string url)
         {
-            var request = new RestRequest("list.php?c=list");
-            var response = restClient.ExecuteAsync(request);
+            var request = new RestRequest(url);
 
-            return DeserializeJSON<CategoryResponse>(response.Result.Content).CategoryList;
+            try
+            {
+                var response = restClient.ExecuteAsync(request);
+
+                if (response.Result.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException("HTTP request was not successfull, HTTP status code: " + response.Result.StatusCode);
+                }
+                if (response.Result.Content == "missing data" || response.Result.Content == "{\"drinks\":null}")
+                {
+                    throw new InvalidOperationException("Reponse is empty");
+                }
+
+                return response.Result.Content!;
+
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ApplicationException($"Operation Failed due to network error:{ex.Message}");
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ApplicationException("Reponse is empty; re-check the request url");
+            }
         }
-        public List<Drink> GetDrinksInCategory(string category)
+
+
+        public IEnumerable<Category> GetCategories()
         {
-            var request = new RestRequest($"filter.php?c={category}");
-            var response = restClient.ExecuteAsync(request);
 
-            return DeserializeJSON<DrinkResponse>(response.Result.Content).DrinkList;
+            try
+            {
+                string response = ExecuteGetRequest($"list.php?c=list");
 
+                var deserializedResponse = DeserializeResponse<CategoryResponse>(response);
+
+                return deserializedResponse.CategoryList ?? new List<Category>();
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
+            catch (JsonException)
+            {
+                throw;
+            }
         }
-        public List<DrinkDetail> GetDrinkDetailsbyID(string drinkID)
+        public IEnumerable<Drink> GetDrinksInCategory(string category)
         {
-            var request = new RestRequest($"lookup.php?i={drinkID}");
-            var response = restClient.ExecuteAsync(request);
+            try
+            {
+                string response = ExecuteGetRequest($"filter.php?c={category}");
 
-            return DeserializeJSON<DrinkDetailResponse>(response.Result.Content).DrinkDetailList;
+                var deserializedResponse = DeserializeResponse<DrinkResponse>(response);
+
+                return deserializedResponse.DrinkList ?? new List<Drink>();
+            }
+            catch(ApplicationException)
+            {
+                throw;
+            }
+            catch(JsonException)
+            {
+                throw;
+            }
         }
-
-        public T DeserializeJSON<T>(string JsonData)
+        public IEnumerable<DrinkDetail> GetDrinkDetailsbyID(string drinkID)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            options.PropertyNameCaseInsensitive = true;
+            try
+            {
+                string response = ExecuteGetRequest($"lookup.php?i={drinkID}");
 
-            return JsonSerializer.Deserialize<T>(JsonData, options);
+                var deserializedResponse = DeserializeResponse<DrinkDetailResponse>(response);
+
+                return deserializedResponse.DrinkDetailList ?? new List<DrinkDetail>();
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
+            catch (JsonException)
+            {
+                throw;
+            }
         }
 
+        public T DeserializeResponse<T>(string JsonData)
+        {
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions();
+                options.PropertyNameCaseInsensitive = true;
+
+                var deserialized = JsonSerializer.Deserialize<T>(JsonData, options);
+                return deserialized!;
+            }
+            catch(JsonException ex)
+            {
+                throw new JsonException($"JSON deserialization failed: {ex}");
+            }
+            
+        }
     }
 }
