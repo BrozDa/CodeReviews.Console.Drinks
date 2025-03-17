@@ -1,37 +1,41 @@
 ### Drinks Project by C# Academy
 
-Project Link: https://www.thecsharpacademy.com/project/15/drinks
+Project Link: <https://www.thecsharpacademy.com/project/15/drinks>
 
 ## Project Requirements
 
-- You were hired by restaurant to create a solution for their drinks menu.
-- Their drinks menu is provided by an external company. All the data about the drinks is in the companies database, accessible through an API.
-- Your job is to create a system that allows the restaurant employee to pull data from any drink in the database.
-- You don't need SQL here, as you won't be operating the database. All you need is to create an user-friendly way to present the data to the users (the restaurant employees)
-- When the users open the application, they should be presented with the Drinks Category Menu and invited to choose a category. Then they'll have the chance to choose a drink and see information about it.
-- When the users visualise the drink detail, there shouldn't be any properties with empty values
+- A restaurant hired you to create a solution for their drinks menu.
+- Drink data comes from an external company’s database via an API.
+- Your system must allow employees to retrieve drink details easily.
+- No SQL is needed—just a simple and user-friendly interface.
+- When opening the app, users should see a drinks category menu.
+- After selecting a category, they choose a drink to view details.
+- Drink details should never include empty properties.
 
 ## Additional Challenges
 
-  - n/a
+  - No extra challenges were specified for this project.
 
 ## Lessons Learned
 
-- First I needed to learn how to send HTTP requests from C# application. During this process, I discovered a convenient library for handling HTTP calls. While the library supports direct deserialization I did not use it so I can try to do it myself.
-	
-- Before starting the project, I built a standalone application and experimented with the JSONPlaceholder API to make my first API calls and practice deserialization. This helped me understand how to retrieve, read, and deserialize responses to ensure valid data.
-
-- I also explored reflection to map drink details into a reduced object containing only the most important information. While this didn’t significantly enhance the application’s functionality, it served as a useful introduction to reflection and helped streamline relevant data for the user.
+- First, I learned how to send HTTP requests in a C# application.
+- Discovered a useful library for API calls but did manual deserialization.
+- To practice, I used the JSONPlaceholder API before starting the project.
+- This helped me understand how to retrieve and parse API responses.
+- I explored reflection to filter drink details into a cleaner object.
+- While reflection didn’t add much functionality, it helped with organization.
 
 ## Areas for Improvement
 
-  - A major limitation is that the free API provides a maximum of 100 results. Additionally, it does not support pagination (or at least, I couldn’t find documentation confirming that it does), which restricts the amount of accessible data.
+- The free API only provides a maximum of 100 results.
+- I couldn’t find any documentation confirming if pagination is supported.
+- This limits the number of drinks the system can access.
 
 ## Main Resources Used
-Drink API: https://www.thecocktaildb.com/api.php
+Drink API: <https://www.thecocktaildb.com/api.php>
 
-JSONPlaceholder API: https://jsonplaceholder.typicode.com/
+JSONPlaceholder API: <https://jsonplaceholder.typicode.com/>
 
-RestSharp documentation: https://restsharp.dev/docs/intro
+RestSharp documentation: <https://restsharp.dev/docs/intro>
 
 Various StackOverFlow posts and MS Documentation
