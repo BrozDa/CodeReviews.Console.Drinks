@@ -1,4 +1,4 @@
-### Drinks Project by C# Academy
+# Drinks Project by C# Academy
 
 Project Link: <https://www.thecsharpacademy.com/project/15/drinks>
 
@@ -14,7 +14,7 @@ Project Link: <https://www.thecsharpacademy.com/project/15/drinks>
 
 ## Additional Challenges
 
-  - No extra challenges were specified for this project.
+- No extra challenges were specified for this project.
 
 ## Lessons Learned
 
@@ -32,6 +32,7 @@ Project Link: <https://www.thecsharpacademy.com/project/15/drinks>
 - This limits the number of drinks the system can access.
 
 ## Main Resources Used
+
 Drink API: <https://www.thecocktaildb.com/api.php>
 
 JSONPlaceholder API: <https://jsonplaceholder.typicode.com/>
