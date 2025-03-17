@@ -1,4 +1,4 @@
-# Drinks Project by C# Academy
+# Drinks Project by CSharp Academy
 
 Project Link: <https://www.thecsharpacademy.com/project/15/drinks>
 
