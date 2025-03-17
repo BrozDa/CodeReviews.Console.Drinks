@@ -42,7 +42,7 @@ namespace Drinks
                         throw new Exception("Drink was not successfully retrieved");
                     }
 
-                    PrintDrinkDetailDTO(new DrinkDetailDTO(drinkDetail));
+                    PrintDrinkDetailDto(new DrinkDetailDto(drinkDetail));
                     isAppRunning = ShouldContinue();
                 }
                 catch (Exception ex)
@@ -135,16 +135,16 @@ namespace Drinks
         /// <summary>
         /// Displays detailed information about the selected drink in a formatted table.
         /// </summary>
-        /// <param name="drinkDetailDTO">The drink details to display.</param>
-        public void PrintDrinkDetailDTO(DrinkDetailDTO drinkDetailDTO)
+        /// <param name="drinkDetailDto">The drink details to display.</param>
+        public void PrintDrinkDetailDto(DrinkDetailDto drinkDetailDto)
         {
             var table = new Table();
             table.AddColumns("Drink Property", "Value");
-            var properties = typeof(DrinkDetailDTO).GetProperties();
+            var properties = typeof(DrinkDetailDto).GetProperties();
 
             foreach (var property in properties)
             {
-                var prop = property.GetValue(drinkDetailDTO) as string;
+                var prop = property.GetValue(drinkDetailDto) as string;
 
                 if (prop is not null)
                 {
@@ -154,15 +154,15 @@ namespace Drinks
 
             int index = 0;
 
-            for (; index < drinkDetailDTO.Measures.Count; index++)
+            for (; index < drinkDetailDto.Measures.Count; index++)
             {
-                table.AddRow($"Ingredient {index + 1}", drinkDetailDTO.Measures[index] + " " + drinkDetailDTO.Ingredients[index]);
+                table.AddRow($"Ingredient {index + 1}", drinkDetailDto.Measures[index] + " " + drinkDetailDto.Ingredients[index]);
             }
 
             //printing leftover ingredients withou measure
-            for (; index < drinkDetailDTO.Ingredients.Count; index++)
+            for (; index < drinkDetailDto.Ingredients.Count; index++)
             {
-                table.AddRow($"Ingredient {index + 1}", drinkDetailDTO.Ingredients[index]);
+                table.AddRow($"Ingredient {index + 1}", drinkDetailDto.Ingredients[index]);
             }
 
             AnsiConsole.Write(table);

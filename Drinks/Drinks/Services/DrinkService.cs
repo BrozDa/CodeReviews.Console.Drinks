@@ -9,15 +9,15 @@ namespace Drinks
     /// </summary>
     internal class DrinkService : IDrinkService
     {
-        public RestClient restClient { get; }
+        public RestClient RestClient { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DrinkService"/> class.
         /// </summary>
-        /// <param name="restClient">The <see cref="RestClient"/> instance used for making API calls.</param>
+        /// <param name="restClient">The <see cref="RestSharp.RestClient"/> instance used for making API calls.</param>
         public DrinkService(RestClient restClient)
         {
-            this.restClient = restClient;
+            this.RestClient = restClient;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Drinks
 
             try
             {
-                var response = restClient.ExecuteAsync(request);
+                var response = RestClient.ExecuteAsync(request);
 
                 if (response.Result.StatusCode != System.Net.HttpStatusCode.OK)
                 {

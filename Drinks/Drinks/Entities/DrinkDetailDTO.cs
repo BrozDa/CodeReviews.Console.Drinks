@@ -4,7 +4,7 @@
     /// Represents the response object containing a list of drinks with details.
     /// This is reduced version of <see cref="DrinkDetail"/>
     /// </summary>
-    internal class DrinkDetailDTO
+    internal class DrinkDetailDto
     {
         public string IdDrink { get; set; }
         public string DrinkName { get; set; }
@@ -17,11 +17,11 @@
         public List<string> Measures { get; set; } = new List<string>();
 
         /// <summary>
-        /// Initializes new object of <see cref="DrinkDetailDTO"/>
+        /// Initializes new object of <see cref="DrinkDetailDto"/>
         /// Maps relevant properties of <see cref="DrinkDetail"/>
         /// </summary>
-        /// <param name="drinkDetail"><see cref="DrinkDetail"/> to be mapped to <see cref="DrinkDetailDTO"/></param>
-        public DrinkDetailDTO(DrinkDetail drinkDetail)
+        /// <param name="drinkDetail"><see cref="DrinkDetail"/> to be mapped to <see cref="DrinkDetailDto"/></param>
+        public DrinkDetailDto(DrinkDetail drinkDetail)
         {
             IdDrink = drinkDetail.IdDrink;
             DrinkName = drinkDetail.StrDrink;
